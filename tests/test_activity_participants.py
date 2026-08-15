@@ -7,11 +7,14 @@ client = TestClient(app)
 
 
 def test_unregister_participant_from_activity():
+    # Arrange
     activity_name = "Chess Club"
     email = "michael@mergington.edu"
 
+    # Act
     response = client.delete(f"/activities/{activity_name}/participants/{email}")
 
+    # Assert
     assert response.status_code == 200
     payload = response.json()
     assert payload["message"] == f"Removed {email} from {activity_name}"
@@ -22,7 +25,13 @@ def test_unregister_participant_from_activity():
 
 
 def test_unregister_missing_participant_returns_404():
-    response = client.delete("/activities/Chess Club/participants/ghost@mergington.edu")
+    # Arrange
+    activity_name = "Chess Club"
+    email = "ghost@mergington.edu"
 
+    # Act
+    response = client.delete(f"/activities/{activity_name}/participants/{email}")
+
+    # Assert
     assert response.status_code == 404
     assert response.json()["detail"] == "Participant not found in activity"
